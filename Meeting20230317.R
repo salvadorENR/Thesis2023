@@ -73,14 +73,14 @@ colnames(data2)[1]="TEACHINGEXPERIENCE"
 theme_set(theme_ridges())
 theme_set(theme_bw())
 chart1 <- data.frame(Scores = c(HMG_SCORE,STUDENTSCORE,SAR_SCORE),Frequency= c(rep("HMS", length(STUDENTSCORE)),rep("TEST", length(STUDENTSCORE)),rep("SRQ-A", length(STUDENTSCORE))))
-ggplot(chart1, aes(x = Scores, y = Frequency)) + geom_density_ridges(quantile_lines = TRUE, quantiles = 2,fill ="#2C64DD",alpha = .5,)+coord_cartesian(clip = "off") + labs(title = 'Distribution of students scores')+theme_ridges(font_size = 30,grid =TRUE, line_size = 0.75, center_axis_labels = TRUE)+scale_x_continuous(breaks = c(0:10), limits = c(-.5, 13),expand = c(0, 0), name = "Scores")
+ggplot(chart1, aes(x = Scores, y = Frequency)) + geom_density_ridges(quantile_lines = TRUE, quantiles = 2,fill ="#F1948A",alpha = .5,)+coord_cartesian(clip = "off") + labs(title = 'Distribution of students scores')+theme_ridges(font_size = 30,grid =TRUE, line_size = 0.75, center_axis_labels = TRUE)+scale_x_continuous(breaks = c(0:10), limits = c(-.5, 13),expand = c(0, 0), name = "Scores")
 estadistics=data.frame(STUDENTSCORE,SAR_SCORE,HMG_SCORE)
 stat.desc(estadistics)
 ggplot(chart1, aes(x = Scores, y = Frequency)) + geom_density_ridges(quantile_lines = TRUE, quantiles = 2,alpha = .5,)+coord_cartesian(clip = "off") + labs(title = 'Distribution of students scores')+theme_ridges(font_size = 30,grid =TRUE, line_size = 0.75, center_axis_labels = TRUE)+scale_x_continuous(breaks = c(0:10), limits = c(-.5, 13),expand = c(0, 0), name = "Scores")
 
 
 chart2 <- data.frame(Scores = c(data2$TotalTestScore,data2$SCORE_SMK,data2$SCORE_PCK),Frequency = c(rep("CKTM", length(data2$TotalTestScore)),rep("SMK", length(data2$TotalTestScore)),rep("PCK", length(data2$TotalTestScore))))
-ggplot(chart2, aes(x = Scores, y = Frequency)) + geom_density_ridges(quantile_lines = TRUE, quantiles = 2,fill ="#2C64DD",alpha = .5,)+coord_cartesian(clip = "off") + labs(title = 'Distribution of teachers scores')+theme_ridges(font_size = 30,grid =TRUE, line_size = 0.75, center_axis_labels = TRUE)+scale_x_continuous(breaks = c(0:10), limits = c(-.5, 13),expand = c(0, 0), name = "Scores")
+ggplot(chart2, aes(x = Scores, y = Frequency)) + geom_density_ridges(quantile_lines = TRUE, quantiles = 2,fill ="#48C9B0",alpha = .5,)+coord_cartesian(clip = "off") + labs(title = 'Distribution of teachers scores')+theme_ridges(font_size = 30,grid =TRUE, line_size = 0.75, center_axis_labels = TRUE)+scale_x_continuous(breaks = c(0:10), limits = c(-.5, 13),expand = c(0, 0), name = "Scores")
 estadistics1=data.frame(data2$TotalTestScore,data2$SCORE_SMK,data2$SCORE_PCK)
 stat.desc(estadistics1)
 ggplot(chart2, aes(x = Scores, y = Frequency)) + geom_density_ridges(quantile_lines = TRUE, quantiles = 2,alpha = .5,)+coord_cartesian(clip = "off") + labs(title = 'Distribution of teachers scores')+theme_ridges(font_size = 30,grid =TRUE, line_size = 0.75, center_axis_labels = TRUE)+scale_x_continuous(breaks = c(0:10), limits = c(-.5, 13),expand = c(0, 0), name = "Scores")
@@ -88,12 +88,27 @@ ggplot(chart2, aes(x = Scores, y = Frequency)) + geom_density_ridges(quantile_li
 hist(data2$TEACHINGEXPERIENCE)
 #Scatterplots
 #SAR VS HMG
+#English
+d=data.frame(SAR_SCORE,HMG_SCORE)
+d$pc <- predict(prcomp(~SAR_SCORE+HMG_SCORE, d))[,1]
+ggplot(d, aes(SAR_SCORE, HMG_SCORE, color = pc)) +
+  geom_point(shape = 16,size = 5, show.legend = FALSE) + ggtitle("Academic Self-Regulation Questionnaire Scores VS The Homework Management Scale Scores") +
+  xlab("Academic Self-Regulation Questionnaire Scores") + ylab("The Homework Managament Scores")+geom_abline(intercept = 4.8672 , slope = 0.3355, color="red", linetype="dashed", size=1.5)+
+  theme_minimal() +scale_color_gradient(low = "#D7E3FB", high = "#092C71")
+
+
+#Spanish
 d=data.frame(SAR_SCORE,HMG_SCORE)
 d$pc <- predict(prcomp(~SAR_SCORE+HMG_SCORE, d))[,1]
 ggplot(d, aes(SAR_SCORE, HMG_SCORE, color = pc)) +
   geom_point(shape = 16,size = 5, show.legend = FALSE) + ggtitle("Autorregulación académica VS Gestión de la tarea") +
   xlab("Autorregulación académica") + ylab("Gestión de la tarea")+geom_abline(intercept = 4.8672 , slope = 0.3355, color="red", linetype="dashed", size=1.5)+
   theme_minimal() +scale_color_gradient(low = "#D7E3FB", high = "#092C71")
+
+
+
+
+
 
 ggplot(d, aes(SAR_SCORE, HMG_SCORE)) +
   geom_point(pch = 21,fill="gray",size = 5, show.legend = FALSE,color="black") + ggtitle("Academic Self-Regulation Questionnaire Scores VS The Homework Management Scale Scores") +
@@ -149,7 +164,7 @@ examinar=data.frame(STUDENTSCORE,HMG_SCORE,SAR_SCORE)
   k=data.frame(c1,c2)
   par(las=1) #That represents the style of axis labels. (0=parallel, 1=all horizontal, 2=all perpendicular to axis, 3=all vertical)
   par(mar= c(5, 12, 4, 2) + 0.1) #Just increase the size of the left margin before you plot: par(mar= c(5, 10, 4, 2) + 0.1) (change the 10 value to suit your taste) 
-  barra=barplot(k$c2,names.arg = c("[1,6]","[7,12]","[13,18]","[19,24]","[25,30]"),ylim=c(0,8),col = "gray",ylab = "Number of teachers",xlab="Years of teaching experience",cex.names=1.5,cex.axis=1.5,cex.lab=1.5)
+  barra=barplot(k$c2,names.arg = c("[1,6]","[7,12]","[13,18]","[19,24]","[25,30]"),ylim=c(0,8),col = "#48C9B0",ylab = "Number of teachers",xlab="Years of teaching experience",cex.names=1.5,cex.axis=1.5,cex.lab=1.5)
   text(x=barra, y = k$c2, label = k$c2, pos = 3, cex = 1.5, col = "black") 
   
   #Radarchart
